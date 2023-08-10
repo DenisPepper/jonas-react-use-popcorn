@@ -44,3 +44,27 @@ export const tempWatchedData = [
     userRating: 9,
   },
 ];
+
+export const containerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+};
+
+export const starContainerStyle = {
+  display: 'flex',
+};
+
+export const textStyle = {
+  lineHeight: '1',
+  margin: '0',
+};
+
+export const starStyle = {
+  width: '20px',
+  height: '20px',
+  display: 'block',
+  cursor: 'pointer',
+};
+
+export const DEFAULT_STARS_COUNT = 5;
