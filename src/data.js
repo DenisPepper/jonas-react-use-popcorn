@@ -68,3 +68,5 @@ export const starStyle = {
 };
 
 export const DEFAULT_STARS_COUNT = 5;
+
+export const DEFAULT_RATING = 0;
