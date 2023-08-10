@@ -16,22 +16,13 @@ export const App = () => {
         <SearchResults movies={movies} />
       </NavBar>
       <Main>
-        <Box element={<MovieList movies={movies} />} />
-        <Box
-          element={
-            <>
-              <WachedSummary watched={watched} />
-              <WachedMoviesList watched={watched} />
-            </>
-          }
-        />
-        {/* <Box>
+        <Box>
           <MovieList movies={movies} />
         </Box>
         <Box>
           <WachedSummary watched={watched} />
           <WachedMoviesList watched={watched} />
-        </Box> */}
+        </Box>
       </Main>
     </>
   );
@@ -76,7 +67,7 @@ const Main = ({ children }) => {
   return <main className='main'>{children}</main>;
 };
 
-export const Box = ({ element }) => {
+export const Box = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -84,7 +75,7 @@ export const Box = ({ element }) => {
       <button className='btn-toggle' onClick={() => setIsOpen((open) => !open)}>
         {isOpen ? '–' : '+'}
       </button>
-      {isOpen && element}
+      {isOpen && children}
     </div>
   );
 };
