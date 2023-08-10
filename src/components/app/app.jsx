@@ -9,20 +9,18 @@ export const App = () => {
 
   return (
     <>
-      <NavBar movies={movies} />
+      <NavBar>
+        <Logo />
+        <Search />
+        <SearchResults movies={movies} />
+      </NavBar>
       <Main movies={movies} />
     </>
   );
 };
 
-const NavBar = ({ movies }) => {
-  return (
-    <nav className='nav-bar'>
-      <Logo />
-      <Search />
-      <SearchResults movies={movies} />
-    </nav>
-  );
+const NavBar = ({ children }) => {
+  return <nav className='nav-bar'>{children}</nav>;
 };
 
 const Logo = () => {
