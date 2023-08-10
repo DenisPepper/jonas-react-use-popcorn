@@ -9,9 +9,7 @@ const NavBar = () => {
     <nav className='nav-bar'>
       <Logo />
       <Search />
-      <p className='num-results'>
-        Found <strong>X</strong> results
-      </p>
+      <SearchResults />
     </nav>
   );
 };
@@ -36,6 +34,14 @@ const Search = () => {
       value={query}
       onChange={(e) => setQuery(e.target.value)}
     />
+  );
+};
+
+const SearchResults = () => {
+  return (
+    <p className='num-results'>
+      Found <strong>X</strong> results
+    </p>
   );
 };
 
@@ -135,6 +141,8 @@ const Main = () => {
     </main>
   );
 };
+
+
 
 export const App = () => {
   return (
