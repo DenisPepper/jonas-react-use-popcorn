@@ -14,7 +14,12 @@ export const App = () => {
         <Search />
         <SearchResults movies={movies} />
       </NavBar>
-      <Main movies={movies} />
+      <Main>
+        <ListBox>
+          <MovieList movies={movies} />
+        </ListBox>
+        <WachedBox />
+      </Main>
     </>
   );
 };
@@ -54,16 +59,11 @@ const SearchResults = ({ movies }) => {
   );
 };
 
-const Main = ({ movies }) => {
-  return (
-    <main className='main'>
-      <ListBox movies={movies} />
-      <WachedBox />
-    </main>
-  );
+const Main = ({ children }) => {
+  return <main className='main'>{children}</main>;
 };
 
-export const ListBox = ({ movies }) => {
+export const ListBox = ({ children }) => {
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (
@@ -74,7 +74,7 @@ export const ListBox = ({ movies }) => {
       >
         {isOpen1 ? '–' : '+'}
       </button>
-      {isOpen1 && <MovieList movies={movies} />}
+      {isOpen1 && children}
     </div>
   );
 };
