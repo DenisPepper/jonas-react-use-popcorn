@@ -55,11 +55,6 @@ export const starContainerStyle = {
   display: 'flex',
 };
 
-export const textStyle = {
-  lineHeight: '1',
-  margin: '0',
-};
-
 export const starStyle = {
   width: '20px',
   height: '20px',
@@ -67,6 +62,13 @@ export const starStyle = {
   cursor: 'pointer',
 };
 
+export const textStyle = {
+  fontFamily: 'sans-serif',
+  fontWeight: 'bold',
+};
+
 export const DEFAULT_STARS_COUNT = 5;
 
-export const DEFAULT_RATING = 0;
+export const DEFAULT_RATING_STAR_COLOR = 'gold';
+
+export const DEFAULT_RATING_STAR_SIZE = '48';
