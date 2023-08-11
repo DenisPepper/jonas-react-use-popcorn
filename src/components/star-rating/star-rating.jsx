@@ -11,6 +11,7 @@ import {
 export const StarRating = (props) => {
   const { maxRating = DEFAULT_STARS_COUNT } = props;
   const [rating, setRating] = useState(DEFAULT_RATING);
+  const [tempRating, setTempRating] = useState(0);
 
   return (
     <div style={containerStyle}>
@@ -18,8 +19,10 @@ export const StarRating = (props) => {
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
-            setRating={() => setRating(i + 1)}
-            full={i + 1 <= rating}
+            mouseClickHandler={() => setRating(i + 1)}
+            mouseOverHandler={() => setTempRating(i + 1)}
+            mouseOutHandler={() => setTempRating(0)}
+            full={tempRating > 0 ? i + 1 <= tempRating : i + 1 <= rating}
           />
         ))}
       </div>
@@ -29,10 +32,16 @@ export const StarRating = (props) => {
 };
 
 const Star = (props) => {
-  const { setRating, full } = props;
+  const { mouseClickHandler, mouseOverHandler, mouseOutHandler, full } = props;
 
   return (
-    <span style={starStyle} role='button' onClick={() => setRating()}>
+    <span
+      style={starStyle}
+      role='button'
+      onClick={() => mouseClickHandler()}
+      onMouseOver={() => mouseOverHandler()}
+      onMouseOut={() => mouseOutHandler()}
+    >
       {full ? (
         <svg
           xmlns='http://www.w3.org/2000/svg'
