@@ -38,9 +38,9 @@ const Star = (props) => {
     <span
       style={starStyle}
       role='button'
-      onClick={() => mouseClickHandler()}
-      onMouseOver={() => mouseOverHandler()}
-      onMouseOut={() => mouseOutHandler()}
+      onClick={mouseClickHandler}
+      onMouseEnter={mouseOverHandler}
+      onMouseLeave={mouseOutHandler}
     >
       {full ? (
         <svg
