@@ -26,7 +26,7 @@ export const StarRating = (props) => {
           />
         ))}
       </div>
-      {(tempRating > 0 || rating > 0) && <span>{tempRating > 0 ? tempRating : rating}</span>}
+      {(tempRating || rating) && <span>{tempRating || rating}</span>}
     </div>
   );
 };
