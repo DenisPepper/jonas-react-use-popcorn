@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import { tempMovieData, tempWatchedData } from '../../data';
 
+const API_KEY = '36db6edc';
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export const App = () => {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+
+  fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=interstellar`)
+    .then((response) => response.json())
+    .then((data) => console.log(data));
 
   return (
     <>
