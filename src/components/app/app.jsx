@@ -10,9 +10,9 @@ export const App = () => {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
 
-  fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=interstellar`)
+  /* fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=interstellar`)
     .then((response) => response.json())
-    .then((data) => setMovies(data.Search));
+    .then((data) => setMovies(data.Search)); */
 
   return (
     <>
