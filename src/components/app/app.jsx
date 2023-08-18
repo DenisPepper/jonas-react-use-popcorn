@@ -10,8 +10,9 @@ const fetchMovies = async (query) => {
   const response = await fetch(
     `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
   );
-  if (!response.ok) throw new Error('Can not fetch the data. Try later...');
   const data = await response.json();
+  if (!response.ok) throw new Error('Can not fetch the data. Try later...');
+  if (data.Error) throw new Error(data.Error);
   return data.Search;
 };
 
@@ -20,7 +21,7 @@ export const App = () => {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const query = 'interstellar';
+  const query = 'dddhhffhg';
 
   useEffect(() => {
     setError('');
