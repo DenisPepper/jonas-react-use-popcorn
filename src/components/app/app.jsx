@@ -6,14 +6,21 @@ const API_KEY = '36db6edc';
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const fetchMovies = async (query) => {
+  const response = await fetch(
+    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
+  );
+  const data = await response.json();
+  return data.Search;
+};
+
 export const App = () => {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const query = 'interstellar';
 
   useEffect(() => {
-    fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=interstellar`)
-      .then((response) => response.json())
-      .then((data) => setMovies(data.Search));
+    fetchMovies(query).then((movies) => setMovies(movies));
   }, []);
 
   return (
