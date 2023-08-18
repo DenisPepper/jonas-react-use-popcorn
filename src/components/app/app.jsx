@@ -10,7 +10,7 @@ const fetchMovies = async (query) => {
   const response = await fetch(
     `http://www.omdbapi.com/?apiey=${API_KEY}&s=${query}`
   );
-  if (!response.ok) throw new Error('can`t fetch the data');
+  if (!response.ok) throw new Error('Can not fetch the data. Try later...');
   const data = await response.json();
   return data.Search;
 };
@@ -19,6 +19,7 @@ export const App = () => {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const query = 'interstellar';
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export const App = () => {
         setMovies(movies);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => setError(err.message));
   }, []);
 
   return (
@@ -39,7 +40,15 @@ export const App = () => {
         <SearchResults movies={movies} />
       </NavBar>
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {error ? (
+            <ErrorMessage message={error} />
+          ) : isLoading ? (
+            <Loader />
+          ) : (
+            <MovieList movies={movies} />
+          )}
+        </Box>
         <Box>
           <WachedSummary watched={watched} />
           <WachedMoviesList watched={watched} />
@@ -51,6 +60,10 @@ export const App = () => {
 
 const Loader = () => {
   return <p className='loader'>Loading...</p>;
+};
+
+const ErrorMessage = ({ message }) => {
+  return <p className='error'>{message}</p>;
 };
 
 const NavBar = ({ children }) => {
