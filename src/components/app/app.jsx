@@ -17,10 +17,15 @@ const fetchMovies = async (query) => {
 export const App = () => {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const query = 'interstellar';
 
   useEffect(() => {
-    fetchMovies(query).then((movies) => setMovies(movies));
+    setIsLoading(true);
+    fetchMovies(query).then((movies) => {
+      setMovies(movies);
+      setIsLoading(false);
+    });
   }, []);
 
   return (
@@ -32,7 +37,7 @@ export const App = () => {
       </NavBar>
       <Main>
         <Box>
-          <MovieList movies={movies} />
+          {isLoading ? <span>Loading...</span> : <MovieList movies={movies} />}
         </Box>
         <Box>
           <WachedSummary watched={watched} />
