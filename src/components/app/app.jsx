@@ -12,7 +12,7 @@ const fetchMovies = async (query) => {
   );
   const data = await response.json();
   if (!response.ok) throw new Error('Can not fetch the data. Try later...');
-  if (data.Error) throw new Error(data.Error);
+  if (data.Response === 'False') throw new Error(data.Error || 'Can not find any movie...');
   return data.Search;
 };
 
@@ -21,7 +21,7 @@ export const App = () => {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const query = 'interstellar';
+  const query = 'interstWQWQellar';
 
   useEffect(() => {
     setError('');
