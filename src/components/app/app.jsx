@@ -8,7 +8,7 @@ const average = (arr) =>
 
 const fetchMovies = async (query) => {
   const response = await fetch(
-    `http://www.omdbapi.com/?apiey=${API_KEY}&s=${query}`
+    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
   );
   if (!response.ok) throw new Error('Can not fetch the data. Try later...');
   const data = await response.json();
@@ -63,7 +63,7 @@ const Loader = () => {
 };
 
 const ErrorMessage = ({ message }) => {
-  return <p className='error'>{message}</p>;
+  return <p className='error'>{message} 🙀🥷👀</p>;
 };
 
 const NavBar = ({ children }) => {
