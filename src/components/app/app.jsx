@@ -8,8 +8,9 @@ const average = (arr) =>
 
 const fetchMovies = async (query) => {
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
+    `http://www.omdbapi.com/?apiey=${API_KEY}&s=${query}`
   );
+  if (!response.ok) throw new Error('can`t fetch the data');
   const data = await response.json();
   return data.Search;
 };
@@ -22,10 +23,12 @@ export const App = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchMovies(query).then((movies) => {
-      setMovies(movies);
-      setIsLoading(false);
-    });
+    fetchMovies(query)
+      .then((movies) => {
+        setMovies(movies);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err.message));
   }, []);
 
   return (
