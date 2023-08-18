@@ -21,7 +21,7 @@ export const App = () => {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const query = 'interstWQWQellar';
+  const query = 'interstellar';
 
   useEffect(() => {
     setError('');
