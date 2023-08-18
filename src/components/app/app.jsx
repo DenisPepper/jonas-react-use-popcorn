@@ -36,9 +36,7 @@ export const App = () => {
         <SearchResults movies={movies} />
       </NavBar>
       <Main>
-        <Box>
-          {isLoading ? <span>Loading...</span> : <MovieList movies={movies} />}
-        </Box>
+        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
         <Box>
           <WachedSummary watched={watched} />
           <WachedMoviesList watched={watched} />
@@ -46,6 +44,10 @@ export const App = () => {
       </Main>
     </>
   );
+};
+
+const Loader = () => {
+  return <p className='loader'>Loading...</p>;
 };
 
 const NavBar = ({ children }) => {
