@@ -23,13 +23,16 @@ export const App = () => {
   const query = 'interstellar';
 
   useEffect(() => {
+    setError('');
     setIsLoading(true);
     fetchMovies(query)
       .then((movies) => {
         setMovies(movies);
-        setIsLoading(false);
       })
-      .catch((err) => setError(err.message));
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -41,13 +44,9 @@ export const App = () => {
       </NavBar>
       <Main>
         <Box>
-          {error ? (
-            <ErrorMessage message={error} />
-          ) : isLoading ? (
-            <Loader />
-          ) : (
-            <MovieList movies={movies} />
-          )}
+          {isLoading && <Loader />}
+          {error && <ErrorMessage message={error} />}
+          {!isLoading && !error && <MovieList movies={movies} />}
         </Box>
         <Box>
           <WachedSummary watched={watched} />
