@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { tempMovieData, tempWatchedData } from '../../data';
+import { StarRating } from '../star-rating/star-rating';
 
 const API_KEY = '36db6edc';
 
@@ -190,18 +191,61 @@ export const Movie = ({ movie, selectHandler }) => {
 };
 
 export const MovieDetails = ({ id, discardHandler }) => {
-  const [movie, setMovie] = useState(null);
+  const [movie, setMovie] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
 
   useEffect(() => {
-    fetchMovieByID(id).then((movie) => setMovie(movie));
+    setIsLoading(true);
+    fetchMovieByID(id)
+      .then((movie) => setMovie(movie))
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   }, [id]);
 
   return (
     <div className='details'>
-      <button className='btn-back' onClick={discardHandler} type='button'>
-        ❌
-      </button>
-      {movie && movie.Title}
+      {isLoading && <Loader />}
+      {!isLoading && (
+        <>
+          <header>
+            <button className='btn-back' onClick={discardHandler} type='button'>
+              ❌
+            </button>
+            <img src={poster} alt={`poster of ${title} movie`} />
+            <div className='details-overview'>
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>🤩{imdbRating} IMDb rating</p>
+            </div>
+          </header>
+          <section>
+            <div className='rating'>
+              <StarRating maxRating={10} size={24} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring: {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 };
