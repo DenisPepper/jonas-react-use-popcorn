@@ -3,8 +3,6 @@ import { tempMovieData, tempWatchedData } from '../../data';
 
 const API_KEY = '36db6edc';
 
-const DEFAULT_SELECTED = 'tt11236038';
-
 const Error = {
   canNotFetch: 'Can not fetch the data. Try later...',
   canNotFind: 'Can not find any movie...',
@@ -38,12 +36,14 @@ const fetchMovies = async (query) => {
 export const App = () => {
   const [query, setQuery] = useState('interstellar');
   const [movies, setMovies] = useState([]);
-  const [selectedId, setSelectedId] = useState(DEFAULT_SELECTED);
+  const [selectedId, setSelectedId] = useState(null);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  console.log(movies);
+  const handleSelectMovie = (id) => {
+    setSelectedId(id);
+  };
 
   useEffect(() => {
     setError('');
@@ -73,7 +73,9 @@ export const App = () => {
         <Box>
           {isLoading && <Loader />}
           {error && <ErrorMessage message={error} />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList movies={movies} selectHandler={handleSelectMovie} />
+          )}
         </Box>
         <Box>
           {selectedId ? (
@@ -150,24 +152,26 @@ export const Box = ({ children }) => {
   );
 };
 
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies, selectHandler }) => {
   return (
-    <ul className='list'>
+    <ul className='list list-movies'>
       {movies?.map((movie) => (
-        <Movie key={movie.imdbID} movie={movie} />
+        <Movie key={movie.imdbID} movie={movie} selectHandler={selectHandler} />
       ))}
     </ul>
   );
 };
 
-export const Movie = ({ movie }) => {
+export const Movie = ({ movie, selectHandler }) => {
   return (
-    <li>
+    <li className='movie'
+      onClick={() => selectHandler(movie.imdbID)}
+    >
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
         <p>
-          <span>🗓</span>
+          <span>📅</span>
           <span>{movie.Year}</span>
         </p>
       </div>
