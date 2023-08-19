@@ -6,6 +6,14 @@ const API_KEY = '36db6edc';
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const debounce = (handler, delay = 1000) => {
+  let timeout;
+  return (evt) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => handler(evt), delay);
+  };
+};
+
 const fetchMovies = async (query) => {
   const response = await fetch(
     `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
@@ -84,13 +92,15 @@ const Logo = () => {
 };
 
 const Search = ({ query, setQuery }) => {
+  const handleSearch = debounce((evt) => setQuery(evt.target.value));
+
   return (
     <input
       className='search'
       type='text'
+      defaultValue={query}
       placeholder='Search movies...'
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
+      onChange={handleSearch}
     />
   );
 };
