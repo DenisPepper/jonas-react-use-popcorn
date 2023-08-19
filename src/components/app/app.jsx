@@ -17,14 +17,18 @@ const fetchMovies = async (query) => {
 };
 
 export const App = () => {
+  const [query, setQuery] = useState('interstellar');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const query = 'interstellar';
 
   useEffect(() => {
     setError('');
+    if (query === '') {
+      setMovies([]);
+      return;
+    }
     setIsLoading(true);
     fetchMovies(query)
       .then((movies) => {
@@ -34,13 +38,13 @@ export const App = () => {
         setError(err.message);
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [query]);
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <SearchResults movies={movies} />
       </NavBar>
       <Main>
@@ -79,9 +83,7 @@ const Logo = () => {
   );
 };
 
-const Search = () => {
-  const [query, setQuery] = useState('');
-
+const Search = ({ query, setQuery }) => {
   return (
     <input
       className='search'
