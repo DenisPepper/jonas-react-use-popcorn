@@ -3,6 +3,8 @@ import { tempMovieData, tempWatchedData } from '../../data';
 
 const API_KEY = '36db6edc';
 
+const DEFAULT_SELECTED = 'tt11236038';
+
 const Error = {
   canNotFetch: 'Can not fetch the data. Try later...',
   canNotFind: 'Can not find any movie...',
@@ -36,7 +38,7 @@ const fetchMovies = async (query) => {
 export const App = () => {
   const [query, setQuery] = useState('interstellar');
   const [movies, setMovies] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(DEFAULT_SELECTED);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -74,8 +76,14 @@ export const App = () => {
           {!isLoading && !error && <MovieList movies={movies} />}
         </Box>
         <Box>
-          <WachedSummary watched={watched} />
-          <WachedMoviesList watched={watched} />
+          {selectedId ? (
+            <MovieDetails id={selectedId} />
+          ) : (
+            <>
+              <WachedSummary watched={watched} />
+              <WachedMoviesList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
@@ -165,6 +173,10 @@ export const Movie = ({ movie }) => {
       </div>
     </li>
   );
+};
+
+export const MovieDetails = ({ id }) => {
+  return <div className='details'>{id}</div>;
 };
 
 const WachedSummary = ({ watched }) => {
