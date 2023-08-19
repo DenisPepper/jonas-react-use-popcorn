@@ -3,6 +3,15 @@ import { tempMovieData, tempWatchedData } from '../../data';
 
 const API_KEY = '36db6edc';
 
+const Error = {
+  canNotFetch: 'Can not fetch the data. Try later...',
+  canNotFind: 'Can not find any movie...',
+};
+
+const throwError = (message) => {
+  throw new Error(message);
+};
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -19,17 +28,20 @@ const fetchMovies = async (query) => {
     `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
   );
   const data = await response.json();
-  if (!response.ok) throw new Error('Can not fetch the data. Try later...');
-  if (data.Response === 'False') throw new Error(data.Error || 'Can not find any movie...');
+  if (!response.ok) throwError(Error.canNotFetch);
+  if (data.Response === 'False') throwError(data.Error || Error.canNotFind);
   return data.Search;
 };
 
 export const App = () => {
   const [query, setQuery] = useState('interstellar');
   const [movies, setMovies] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  console.log(movies);
 
   useEffect(() => {
     setError('');
