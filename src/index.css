@@ -178,11 +178,11 @@ body {
 
 .list.list-movies li {
   cursor: pointer;
-  opacity: 0.5;
   transition: all 0.3s;
 }
 
 .list.list-movies li:hover {
+  opacity: 0.5;
   background-color: var(--color-background-100);
 }
 
