@@ -33,6 +33,14 @@ const fetchMovies = async (query) => {
   return data.Search;
 };
 
+const fetchMovieByID = async (id) => {
+  const response = await fetch(
+    `http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`
+  );
+  const data = await response.json();
+  return data;
+};
+
 export const App = () => {
   const [query, setQuery] = useState('interstellar');
   const [movies, setMovies] = useState([]);
@@ -42,7 +50,11 @@ export const App = () => {
   const [error, setError] = useState('');
 
   const handleSelectMovie = (id) => {
-    setSelectedId(id);
+    setSelectedId((prev) => (id === prev ? null : id));
+  };
+
+  const handleDiscardMovie = () => {
+    setSelectedId(null);
   };
 
   useEffect(() => {
@@ -79,7 +91,7 @@ export const App = () => {
         </Box>
         <Box>
           {selectedId ? (
-            <MovieDetails id={selectedId} />
+            <MovieDetails id={selectedId} discardHandler={handleDiscardMovie} />
           ) : (
             <>
               <WachedSummary watched={watched} />
@@ -164,9 +176,7 @@ const MovieList = ({ movies, selectHandler }) => {
 
 export const Movie = ({ movie, selectHandler }) => {
   return (
-    <li className='movie'
-      onClick={() => selectHandler(movie.imdbID)}
-    >
+    <li className='movie' onClick={() => selectHandler(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
@@ -179,8 +189,21 @@ export const Movie = ({ movie, selectHandler }) => {
   );
 };
 
-export const MovieDetails = ({ id }) => {
-  return <div className='details'>{id}</div>;
+export const MovieDetails = ({ id, discardHandler }) => {
+  const [movie, setMovie] = useState(null);
+
+  useEffect(() => {
+    fetchMovieByID(id).then((movie) => setMovie(movie));
+  }, [id]);
+
+  return (
+    <div className='details'>
+      <button className='btn-back' onClick={discardHandler} type='button'>
+        ❌
+      </button>
+      {movie && movie.Title}
+    </div>
+  );
 };
 
 const WachedSummary = ({ watched }) => {
