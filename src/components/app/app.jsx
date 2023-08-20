@@ -267,7 +267,7 @@ export const MovieDetails = ({
           <section>
             <div className='rating'>
               {isAdded ? (
-                <p>Added to watched list</p>
+                <p>Added to watched list with rating: {isAdded.userRating} ⭐</p>
               ) : (
                 <StarRating
                   maxRating={10}
