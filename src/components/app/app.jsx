@@ -252,6 +252,12 @@ export const MovieDetails = ({
       .finally(() => setIsLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    if (!title) return;
+    document.title = title;
+    return () => document.title = 'use popcorn 🍿';
+  }, [title]);
+
   return (
     <div className='details'>
       {isLoading && <Loader />}
