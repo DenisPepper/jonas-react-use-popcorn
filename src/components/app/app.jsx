@@ -24,9 +24,10 @@ const debounce = (handler, delay = 1000) => {
   };
 };
 
-const fetchMovies = async (query) => {
+const fetchMovies = async (query, abortController) => {
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`
+    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`,
+    { signal: abortController.signal }
   );
   const data = await response.json();
   if (!response.ok) throwError(Error.canNotFetch);
@@ -43,12 +44,17 @@ const fetchMovieByID = async (id) => {
 };
 
 export const App = () => {
-  const [query, setQuery] = useState('interstellar');
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const abortController = new AbortController();
+
+  const handleSetQuery = (value) => {
+    setQuery(value);
+  };
 
   const handleSelectMovie = (id) => {
     setSelectedId((prev) => (id === prev ? null : id));
@@ -73,21 +79,24 @@ export const App = () => {
       return;
     }
     setIsLoading(true);
-    fetchMovies(query)
+    fetchMovies(query, abortController)
       .then((movies) => {
         setMovies(movies);
       })
       .catch((err) => {
-        setError(err.message);
+        if (err.name !== 'AbortError') {
+          setError(err.message);
+        }
       })
       .finally(() => setIsLoading(false));
+    return () => abortController.abort();
   }, [query]);
 
   return (
     <>
       <NavBar>
         <Logo />
-        <Search query={query} setQuery={setQuery} />
+        <Search query={query} setQuery={handleSetQuery} />
         <SearchResults movies={movies} />
       </NavBar>
       <Main>
@@ -255,7 +264,7 @@ export const MovieDetails = ({
   useEffect(() => {
     if (!title) return;
     document.title = title;
-    return () => document.title = 'use popcorn 🍿';
+    return () => (document.title = 'use popcorn 🍿');
   }, [title]);
 
   return (
