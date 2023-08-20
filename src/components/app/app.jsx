@@ -74,6 +74,7 @@ export const App = () => {
   };
 
   useEffect(() => {
+    handleDiscardMovie();
     setError('');
     if (query === '') {
       setMovies([]);
