@@ -267,6 +267,16 @@ export const MovieDetails = ({
     return () => (document.title = 'use popcorn 🍿');
   }, [title]);
 
+  const handleKeydown = (evt) => {
+    if (evt.key !== 'Escape') return;
+    discardHandler();
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeydown);
+    return () => document.removeEventListener('keydown', handleKeydown);
+  }, []);
+
   return (
     <div className='details'>
       {isLoading && <Loader />}
