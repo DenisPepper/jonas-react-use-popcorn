@@ -62,6 +62,10 @@ export const App = () => {
     setWatched((prev) => [...prev, movie]);
   };
 
+  const handleRemoveWatched = (id) => {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  };
+
   useEffect(() => {
     setError('');
     if (query === '') {
@@ -105,7 +109,10 @@ export const App = () => {
           ) : (
             <>
               <WachedSummary watched={watched} />
-              <WachedMoviesList watched={watched} />
+              <WachedMoviesList
+                watched={watched}
+                removeHandler={handleRemoveWatched}
+              />
             </>
           )}
         </Box>
@@ -267,7 +274,9 @@ export const MovieDetails = ({
           <section>
             <div className='rating'>
               {isAdded ? (
-                <p>Added to watched list with rating: {isAdded.userRating} ⭐</p>
+                <p>
+                  Added to watched list with rating: {isAdded.userRating} ⭐
+                </p>
               ) : (
                 <StarRating
                   maxRating={10}
@@ -308,11 +317,11 @@ const WachedSummary = ({ watched }) => {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
@@ -323,17 +332,21 @@ const WachedSummary = ({ watched }) => {
   );
 };
 
-const WachedMoviesList = ({ watched }) => {
+const WachedMoviesList = ({ watched, removeHandler }) => {
   return (
     <ul className='list'>
       {watched.map((movie) => (
-        <WachedMovie key={movie.imdbID} movie={movie} />
+        <WachedMovie
+          key={movie.imdbID}
+          movie={movie}
+          removeHandler={removeHandler}
+        />
       ))}
     </ul>
   );
 };
 
-const WachedMovie = ({ movie }) => {
+const WachedMovie = ({ movie, removeHandler }) => {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -351,6 +364,13 @@ const WachedMovie = ({ movie }) => {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
+        <button
+          className='btn-delete'
+          onClick={() => removeHandler(movie.imdbID)}
+          type='button'
+        >
+          X
+        </button>
       </div>
     </li>
   );
