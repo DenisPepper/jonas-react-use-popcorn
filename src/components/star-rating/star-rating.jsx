@@ -19,9 +19,15 @@ export const StarRating = (props) => {
     size = DEFAULT_RATING_STAR_SIZE,
     css = '',
     messages = [],
+    setRatingHandler,
   } = props;
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
+
+  const handleSetRating = (rating) => {
+    setRating(rating);
+    setRatingHandler(rating);
+  };
 
   return (
     <div style={{ ...containerStyle, height: `${size}px` }} className={css}>
@@ -29,7 +35,7 @@ export const StarRating = (props) => {
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
-            mouseClickHandler={() => setRating(i + 1)}
+            mouseClickHandler={() => handleSetRating(i + 1)}
             mouseOverHandler={() => setTempRating(i + 1)}
             mouseOutHandler={() => setTempRating(0)}
             full={tempRating > 0 ? i + 1 <= tempRating : i + 1 <= rating}
@@ -40,7 +46,7 @@ export const StarRating = (props) => {
           />
         ))}
       </div>
-      <p style={{...textStyle, color, fontSize: size}} aria-label='Рейтинг:'>
+      <p style={{ ...textStyle, color, fontSize: size }} aria-label='Рейтинг:'>
         {messages.length >= maxRating
           ? messages[tempRating - 1] || messages[rating - 1] || ''
           : tempRating || rating || ''}

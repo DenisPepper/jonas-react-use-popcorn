@@ -58,6 +58,10 @@ export const App = () => {
     setSelectedId(null);
   };
 
+  const handleAddWached = (movie) => {
+    setWatched((prev) => [...prev, movie]);
+  };
+
   useEffect(() => {
     setError('');
     if (query === '') {
@@ -92,7 +96,12 @@ export const App = () => {
         </Box>
         <Box>
           {selectedId ? (
-            <MovieDetails id={selectedId} discardHandler={handleDiscardMovie} />
+            <MovieDetails
+              id={selectedId}
+              discardHandler={handleDiscardMovie}
+              addWatchedHandler={handleAddWached}
+              watched={watched}
+            />
           ) : (
             <>
               <WachedSummary watched={watched} />
@@ -190,9 +199,16 @@ export const Movie = ({ movie, selectHandler }) => {
   );
 };
 
-export const MovieDetails = ({ id, discardHandler }) => {
+export const MovieDetails = ({
+  id,
+  discardHandler,
+  addWatchedHandler,
+  watched,
+}) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
+  const isAdded = watched.find((movie) => movie.imdbID === id);
 
   const {
     Title: title,
@@ -206,6 +222,20 @@ export const MovieDetails = ({ id, discardHandler }) => {
     Director: director,
     Genre: genre,
   } = movie;
+
+  const HandleAdd = () => {
+    const newWatchedMovie = {
+      imdbID: id,
+      title,
+      year,
+      poster,
+      userRating,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+    };
+    addWatchedHandler(newWatchedMovie);
+    discardHandler();
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -236,7 +266,20 @@ export const MovieDetails = ({ id, discardHandler }) => {
           </header>
           <section>
             <div className='rating'>
-              <StarRating maxRating={10} size={24} />
+              {isAdded ? (
+                <p>Added to watched list</p>
+              ) : (
+                <StarRating
+                  maxRating={10}
+                  size={24}
+                  setRatingHandler={setUserRating}
+                />
+              )}
+              {userRating > 0 && (
+                <button className='btn-add' onClick={HandleAdd} type='button'>
+                  + Add to list
+                </button>
+              )}
             </div>
             <p>
               <em>{plot}</em>
@@ -293,8 +336,8 @@ const WachedMoviesList = ({ watched }) => {
 const WachedMovie = ({ movie }) => {
   return (
     <li>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>
