@@ -53,6 +53,7 @@ export const App = () => {
   const abortController = new AbortController();
 
   const handleSetQuery = (value) => {
+    abortController.abort(); // отменит предыдущий запрос, который отправляется через эффект
     setQuery(value);
   };
 
@@ -89,7 +90,6 @@ export const App = () => {
         }
       })
       .finally(() => setIsLoading(false));
-    return () => abortController.abort();
   }, [query]);
 
   return (
