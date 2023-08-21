@@ -69,12 +69,15 @@ export const App = () => {
 
   const handleAddWached = (movie) => {
     setWatched((prev) => [...prev, movie]);
-    localStorage.setItem(WATCHED_KEY, JSON.stringify([...watched, movie]));
   };
 
   const handleRemoveWatched = (id) => {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
+
+  useEffect(() => {
+    localStorage.setItem(WATCHED_KEY, JSON.stringify(watched));
+  }, [watched]);
 
   useEffect(() => {
     handleDiscardMovie();
