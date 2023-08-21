@@ -49,7 +49,10 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(() => {
+    const saved = localStorage.getItem(WATCHED_KEY);
+    return JSON.parse(saved);
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const abortController = new AbortController();
