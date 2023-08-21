@@ -4,6 +4,8 @@ import { StarRating } from '../star-rating/star-rating';
 
 const API_KEY = '36db6edc';
 
+const WATCHED_KEY = 'watched';
+
 const Error = {
   canNotFetch: 'Can not fetch the data. Try later...',
   canNotFind: 'Can not find any movie...',
@@ -67,6 +69,7 @@ export const App = () => {
 
   const handleAddWached = (movie) => {
     setWatched((prev) => [...prev, movie]);
+    localStorage.setItem(WATCHED_KEY, JSON.stringify([...watched, movie]));
   };
 
   const handleRemoveWatched = (id) => {
