@@ -55,10 +55,8 @@ export const App = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const abortController = new AbortController();
 
   const handleSetQuery = (value) => {
-    abortController.abort(); // отменит предыдущий запрос, который отправляется через эффект
     setQuery(value);
   };
 
@@ -83,6 +81,7 @@ export const App = () => {
   }, [watched]);
 
   useEffect(() => {
+    const abortController = new AbortController();
     handleDiscardMovie();
     setError('');
     if (query === '') {
@@ -100,6 +99,7 @@ export const App = () => {
         }
       })
       .finally(() => setIsLoading(false));
+    return () => abortController.abort(); // отменит предыдущий запрос, который отправляется через эффект
   }, [query]);
 
   return (
