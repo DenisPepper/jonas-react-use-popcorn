@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { tempMovieData, tempWatchedData } from '../../data';
 import { StarRating } from '../star-rating/star-rating';
 
@@ -162,7 +162,13 @@ const Logo = () => {
 };
 
 const Search = ({ query, setQuery }) => {
+  const inputRef = useRef(null);
+
   const handleSearch = debounce((evt) => setQuery(evt.target.value));
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <input
@@ -171,6 +177,7 @@ const Search = ({ query, setQuery }) => {
       defaultValue={query}
       placeholder='Search movies...'
       onChange={handleSearch}
+      ref={inputRef}
     />
   );
 };
