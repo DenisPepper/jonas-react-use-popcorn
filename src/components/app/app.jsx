@@ -162,23 +162,17 @@ const Logo = () => {
 };
 
 const Search = ({ query, setQuery }) => {
-  const inputRef = useRef(null);
+  const input = useRef(null);
 
   const handleSearch = debounce((evt) => setQuery(evt.target.value));
 
-  const setFocus = () => inputRef.current?.focus();
-
-  const clear = () => {
-    inputRef.current.value = '';
-  };
-
   useEffect(() => {
-    setFocus();
+    input.current?.focus();
 
     const handleKeydown = (evt) => {
-      if (evt.key !== 'Enter') return;
-      setFocus();
-      clear();
+      if (evt.target === input.current || evt.key !== 'Enter') return;
+      input.current?.focus();
+      input.current.value = '';
       setQuery('');
     };
 
@@ -193,7 +187,7 @@ const Search = ({ query, setQuery }) => {
       defaultValue={query}
       placeholder='Search movies...'
       onChange={handleSearch}
-      ref={inputRef}
+      ref={input}
     />
   );
 };
