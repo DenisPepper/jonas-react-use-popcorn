@@ -166,8 +166,24 @@ const Search = ({ query, setQuery }) => {
 
   const handleSearch = debounce((evt) => setQuery(evt.target.value));
 
+  const setFocus = () => inputRef.current?.focus();
+
+  const clear = () => {
+    inputRef.current.value = '';
+  };
+
   useEffect(() => {
-    inputRef.current?.focus();
+    setFocus();
+
+    const handleKeydown = (evt) => {
+      if (evt.key !== 'Enter') return;
+      setFocus();
+      clear();
+      setQuery('');
+    };
+
+    document.addEventListener('keydown', handleKeydown);
+    return () => document.removeEventListener('keydown', handleKeydown);
   }, []);
 
   return (
