@@ -253,6 +253,8 @@ export const MovieDetails = ({
   const [userRating, setUserRating] = useState('');
   const isAdded = watched.find((movie) => movie.imdbID === id);
 
+  const countRef = useRef(0);
+
   const {
     Title: title,
     Year: year,
@@ -266,7 +268,7 @@ export const MovieDetails = ({
     Genre: genre,
   } = movie;
 
-  const HandleAdd = () => {
+  const handleAdd = () => {
     const newWatchedMovie = {
       imdbID: id,
       title,
@@ -279,6 +281,10 @@ export const MovieDetails = ({
     addWatchedHandler(newWatchedMovie);
     discardHandler();
   };
+
+  useEffect(() => {
+    if (userRating) countRef.current++;
+  }, [userRating]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -337,7 +343,7 @@ export const MovieDetails = ({
                 />
               )}
               {userRating > 0 && (
-                <button className='btn-add' onClick={HandleAdd} type='button'>
+                <button className='btn-add' onClick={handleAdd} type='button'>
                   + Add to list
                 </button>
               )}
