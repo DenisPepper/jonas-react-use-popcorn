@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { tempMovieData, tempWatchedData } from '../../data';
 import { StarRating } from '../star-rating/star-rating';
+import { useKeypessHandler } from '../../use-keypess-handler';
 
 const API_KEY = '36db6edc';
 
@@ -166,18 +167,15 @@ const Search = ({ query, setQuery }) => {
 
   const handleSearch = debounce((evt) => setQuery(evt.target.value));
 
+  useKeypessHandler('Enter', (evt) => {
+    if (evt.target === input.current) return;
+    input.current?.focus();
+    input.current.value = '';
+    setQuery('');
+  });
+
   useEffect(() => {
     input.current?.focus();
-
-    const handleKeydown = (evt) => {
-      if (evt.target === input.current || evt.key !== 'Enter') return;
-      input.current?.focus();
-      input.current.value = '';
-      setQuery('');
-    };
-
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
   }, []);
 
   return (
@@ -282,6 +280,8 @@ export const MovieDetails = ({
     discardHandler();
   };
 
+  useKeypessHandler('Escape', discardHandler);
+
   useEffect(() => {
     if (userRating) countRef.current++;
   }, [userRating]);
@@ -299,16 +299,6 @@ export const MovieDetails = ({
     document.title = title;
     return () => (document.title = 'use popcorn 🍿');
   }, [title]);
-
-  useEffect(() => {
-    const handleKeydown = (evt) => {
-      if (evt.key !== 'Escape') return;
-      discardHandler();
-    };
-
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
-  }, []);
 
   return (
     <div className='details'>
